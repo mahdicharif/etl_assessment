@@ -2,6 +2,7 @@
 
 This project implements an ETL pipeline to handle data related to
 Shopify configuration using Airflow and Docker. Tests are also implemented.
+The backfill logic is straightforward, each run being focused on a single day.
 
 ## Prerequisites
 
@@ -12,10 +13,11 @@ Shopify configuration using Airflow and Docker. Tests are also implemented.
 
 1. Clone the repository
 
-2. Build and start the Docker containers:
+2. Export the AWS access and secret keys. Build and start the Docker containers:
 
 ```
-mkdir -p ./dags ./logs ./plugins ./config
+export AWS_ACCESS_KEY_ID=youraccesskey
+export AWS_SECRET_ACCESS_KEY=yoursecretkey
 echo -e "AIRFLOW_UID=$(id -u)" > .env
 docker-compose up --build
 ```
@@ -49,7 +51,7 @@ algolia-etl run-etl --start-date 2019-04-01 --end-date 2019-04-07
 To run the unit tests:
 
 ```
-docker-compose run airflow-webserver python -m unittest discover tests
+python -m unittest discover tests
 ```
 
 # Notes
@@ -67,3 +69,19 @@ black .
 flake8 .
 ```
 If there are still warnings poping up, you'll need to modify the code manually (like when lines are too long).
+
+
+### Improvements for production
+
+Lots of improvements could be brought to this project.
+Here are some main ideas: 
+
+- Use github actions to test the code before deploying it
+- Build the docker image and store it in a registry (ex: ECR)
+- Increase the number of celery nodes to scale up for production
+- Use a secret manager to store credentials
+- Use an AWS IAM Role to authenticate
+- Use cloud logging, like through CloudWatch
+- Instead of using a container-based database, use a cloud based one (like RDS for PostgreSQL)
+- Push metrics and implement monitoring (with Prometheus/Grafana)
+- Create Data Quality checks

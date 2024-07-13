@@ -6,7 +6,7 @@ default_args = {
     "owner": "airflow",
     "depends_on_past": False,
     "start_date": datetime(2019, 4, 1),
-    "end_date": datetime(2019, 4, 7),
+    "end_date": datetime(2019, 4, 8),
     "email_on_failure": False,
     "email_on_retry": False,
     "retries": 1,
